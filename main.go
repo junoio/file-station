@@ -14,7 +14,7 @@ var (
 	Api             = "https://oss-cn-beijing.aliyuncs.com"
 	AccessKeyId     = ""
 	AccessKeySecret = ""
-	Bucket          = "f-devclould-station"
+	Bucket          = ""
 	Path            = ""
 )
 
@@ -43,11 +43,12 @@ func uploadFile(path string) (string, error) {
 
 func validParams() error {
 	if Api == "" || AccessKeyId == "" || AccessKeySecret == "" || Bucket == "" {
-		panic("参数Api,AccessKeyId,AccessKeySecret,Bucket未设置")
+		return errors.New("参数Api,AccessKeyId,AccessKeySecret,Bucket未设置")
 	}
 
 	if Path == "" {
-		return errors.New("please see -h")
+		flag.Usage()
+		os.Exit(1)
 	}
 	return nil
 }
@@ -66,7 +67,7 @@ func main() {
 	loadParam()
 	err := validParams()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "usage error:", err.Error())
+		fmt.Fprintln(os.Stderr, "Error: ", err.Error())
 		os.Exit(1)
 	}
 	s, err := uploadFile(Path)
