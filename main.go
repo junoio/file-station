@@ -1,5 +1,10 @@
 package main
 
+import (
+	"file-station/cli"
+	"fmt"
+)
+
 // import (
 // 	"errors"
 // 	"flag"
@@ -78,3 +83,10 @@ package main
 // 	fmt.Printf("文件上传成功！\n 下载链接：%s\n下载链接有效时间1小时。", s)
 
 // }
+func main() {
+	err := cli.RootCmd.Execute()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+}

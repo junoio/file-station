@@ -8,18 +8,19 @@ import (
 )
 
 type Options struct {
-	endpoint, accessKeyID, accessKeySecret string
+	Endpoint, AccessKeyID, AccessKeySecret string
 }
 
 func (o *Options) validate() error {
-	if o.endpoint == "" || o.accessKeyID == "" || o.accessKeySecret == "" {
+	if o.Endpoint == "" || o.AccessKeyID == "" || o.AccessKeySecret == "" {
 		return errors.New("endpoint accessKeyID accessKeySecret 错误")
 	}
 	return nil
 }
 
 type aliyunOss struct {
-	client *oss.Client
+	client           *oss.Client
+	progressListener oss.ProgressListener
 }
 
 //上传
@@ -28,7 +29,7 @@ func (a *aliyunOss) Upload(bucketName, objectKey, fileName string) error {
 	if err != nil {
 		return err
 	}
-	err = bucket.PutObjectFromFile(objectKey, fileName)
+	err = bucket.PutObjectFromFile(objectKey, fileName, oss.Progress(a.progressListener))
 	if err != nil {
 		return err
 	}
@@ -46,6 +47,6 @@ func NewOss(op *Options) (*aliyunOss, error) {
 	if err != nil {
 		return nil, err
 	}
-	client, err := oss.New(op.endpoint, op.accessKeyID, op.accessKeySecret)
-	return &aliyunOss{client}, err
+	client, err := oss.New(op.Endpoint, op.AccessKeyID, op.AccessKeySecret)
+	return &aliyunOss{client, &ProgressListener{}}, err
 }
