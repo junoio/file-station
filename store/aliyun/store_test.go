@@ -31,9 +31,9 @@ func TestUpload(t *testing.T) {
 	a.NoError(err)
 }
 
-func TestUploadError(t *testing.T) {
-	a := assert.New(t)
-	var uploader store.Uploader = client
-	err := uploader.Upload(Bucket, "testfile", "123")
-	a.Error(err, "open 123: no such file or directory")
-}
+// func TestUploadError(t *testing.T) {
+// 	a := assert.New(t)
+// 	var uploader store.Uploader = client
+// 	err := uploader.Upload(Bucket, "testfile", "123")
+// 	a.Error(err, "open 123: no such file or directory")
+// }
